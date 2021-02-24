@@ -3,11 +3,30 @@
 error_reporting(E_ALL);
 
 spl_autoload_register(function (string $className) {
-    var_dump($className);
     require_once __DIR__ .  '/../src/' . str_replace('\\', '/', $className) . '.php';
 });
 
-$author = new \Ivalex\Models\Users\User('Ivan');
-$article = new \Ivalex\Models\Articles\Article('Good night', 'Go to sleep', $author);
+$route = $_GET['route'] ?? '';
+$routes = require __DIR__ . '/../src/routes.php';
 
-echo "Автор статьи {$article->getTitle()} - {$article->getAuthor()->getName()}";
+$routeFound = false;
+foreach ($routes as $pattern => $controllerAction) {
+    preg_match($pattern, $route, $matches);
+    if (!empty($matches)) {
+        $routeFound = true;
+        break;
+    }
+}
+
+if (!$routeFound) {
+    echo '404 page not found';
+}
+
+unset($matches[0]);
+
+$controllerName = $controllerAction[0];
+$actionName = $controllerAction[1];
+
+$controller = new $controllerName();
+$controller->$actionName(...$matches);
+
