@@ -4,11 +4,12 @@ namespace Ivalex\Views;
 
 class View
 {
-    private $templatesPath;
+    private $templatePath;
 
-    public function __construct(string $templatesPath)
+    public function __construct(string $templateDir)
     {
-        $this->templatesPath = $templatesPath;
+        $templatesPath = __DIR__ . (require __DIR__ . '/../../settings.php')['templatesPath'];
+        $this->templatePath = $templatesPath . '/' . $templateDir;
     }
 
     /**
@@ -17,14 +18,16 @@ class View
      * @param string $templateName name of the page template
      * @param array $vars array of variables [...[$key => $value]] using in the page
      */
-    public function renderHtml(string $templateName, array $vars = [])
+    public function renderHtml(string $templateName, array $vars = [], int $httpStatusCode = 200)
     {
+        // send processed HTTP status code
+        http_response_code($httpStatusCode);
         // get variables
         extract($vars);
 
         // put the page in the buffer
         ob_start();
-        include $this->templatesPath . '/' . $templateName;
+        include $this->templatePath . '/' . $templateName;
         $buffer = ob_get_contents();
         ob_end_clean();
 

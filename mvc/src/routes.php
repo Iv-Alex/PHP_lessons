@@ -1,6 +1,6 @@
 <?php
 
 return [
-    '~^hello/(.*)$~' => [\Ivalex\Controllers\MainController::class, 'sayHello'],
+    '~^tasks/(\d+)$~' => [\Ivalex\Controllers\TasksController::class, 'view'],
     '~^$~' => [\Ivalex\Controllers\MainController::class, 'main'],
 ];

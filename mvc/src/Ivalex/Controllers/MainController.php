@@ -2,30 +2,29 @@
 
 namespace Ivalex\Controllers;
 
+use Ivalex\Services\Db;
 use Ivalex\Views\View;
 
 class MainController
 {
 
     private $view;
+    private $db;
 
     public function __construct()
     {
-        $this->view = new View(__DIR__ . '/../../../templates');
+        $this->view = new View('default');
+        $this->db = new Db();
     }
 
     public function main()
     {
-        $tasks = [
-            ['title' => 'task1', 'text' => 'text1'],
-            ['title' => 'task2', 'text' => 'text2'],
-            ['title' => 'task3', 'text' => 'text3'],
-        ];
-        $this->view->renderHtml('main/main.php', ['tasks' => $tasks]);
+        $tasks = $this->db->query('SELECT * FROM `tasks`;');
+        $this->view->renderHtml('main.php', ['tasks' => $tasks]);
     }
 
     public function sayHello(string $name)
     {
-        $this->view->renderHtml('main/hello.php', ['name' => $name]);
+        $this->view->renderHtml('hello.php', ['name' => $name]);
     }
 }
