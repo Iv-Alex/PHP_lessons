@@ -2,34 +2,42 @@
 
 namespace Ivalex\Controllers;
 
-use Ivalex\Services\Db;
 use Ivalex\Views\View;
+use Ivalex\Models\Tasks\Task;
 
 class TasksController
 {
     private $view;
-    private $db;
 
     public function __construct()
     {
         $this->view = new View('default');
-        $this->db = new Db();
     }
 
-    public function view($taskId)
+    public function view(int $taskId)
     {
-        $result = $this->db->query(
-            'SELECT * FROM `tasks` WHERE task_id=:id;',
-            [':id' => $taskId]
-        );
+        $task = Task::getById($taskId);
 
         // if task not found
-        if ($result === []) {
+        if ($task === null) {
             // create an error page and set the HTTP status code to 404
             $this->view->renderHtml('err404.php', [], 404);
             return;
         }
 
-        $this->view->renderHtml('task.php', ['task' => $result[0]]);
+        // get task status
+        $taskStatus = $task->getStatus();
+        $this->view->renderHtml(
+            'task.php',
+            [
+                'task' => $task,
+                'taskStatus' => $taskStatus,
+            ]
+        );
+    }
+
+    public function new()
+    {
+        $this->view->renderHtml('newTask.php');
     }
 }

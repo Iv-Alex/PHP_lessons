@@ -3,11 +3,20 @@
     <main class="p-3">
         <div class="card">
             <div class="card-header">
-                <div><?= $task['name'] ?></div>
-                <div><?= $task['email'] ?></div>
+                <div class="row--------------------------------------------">
+                    <div>
+                        <div><?= $task->getName() ?></div>
+                        <div><?= $task->getEmail() ?></div>
+                    </div>
+                    <div>
+                        <?php foreach ($taskStatus as $status) : ?>
+                            <div><?= $status->caption ?></div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
-                <p class="card-text"><?= $task['text'] ?></p>
+                <p class="card-text"><?= $task->getText() ?></p>
                 <button class="btn btn-primary">Go somewhere</button>
             </div>
         </div>

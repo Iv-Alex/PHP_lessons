@@ -25,7 +25,7 @@ class Db
     /**
      * 
      */
-    public function query(string $sql, $params = []): ?array
+    public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
     {
         $statement = $this->pdo->prepare($sql);
         $result = $statement->execute($params);
@@ -34,6 +34,6 @@ class Db
             return null;
         }
 
-        return $statement->fetchAll();
+        return $statement->fetchAll(\PDO::FETCH_CLASS, $className);
     }
 }

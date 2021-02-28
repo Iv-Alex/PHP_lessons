@@ -2,17 +2,36 @@
 
 namespace Ivalex\Models\Users;
 
-class User
-{
-    private $name;
+use Ivalex\Models\ActiveRecordEntity;
 
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
+class User extends ActiveRecordEntity
+{
+    protected $id;
+    protected $name;
+    protected $email;
+    protected $pwdHash;
+    protected $role;
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    /**
+     * contract
+     */
+    protected static function getTableName(): string
+    {
+        return 'users';
     }
 }

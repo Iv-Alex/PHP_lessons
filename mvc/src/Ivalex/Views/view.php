@@ -12,6 +12,13 @@ class View
         $this->templatePath = $templatesPath . '/' . $templateDir;
     }
 
+    //! delete it
+    public static function echoIt($anything) {
+        echo '<pre>';
+        var_dump($anything);
+        echo '</pre>';
+    }
+
     /**
      * creates html page using variables ($vars)
      *

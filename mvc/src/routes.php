@@ -1,6 +1,7 @@
 <?php
 
 return [
-    '~^tasks/(\d+)$~' => [\Ivalex\Controllers\TasksController::class, 'view'],
-    '~^$~' => [\Ivalex\Controllers\MainController::class, 'main'],
+    '~^tasks/(\d+)$~i' => [\Ivalex\Controllers\TasksController::class, 'view'],
+    '~^tasks/new$~i' => [\Ivalex\Controllers\TasksController::class, 'new'],
+    '~^$~i' => [\Ivalex\Controllers\MainController::class, 'main'],
 ];

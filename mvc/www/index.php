@@ -2,6 +2,8 @@
 
 error_reporting(E_ALL);
 
+use Ivalex\Views\View;
+
 // autoload
 spl_autoload_register(function (string $className) {
     require_once __DIR__ .  '/../src/' . str_replace('\\', '/', $className) . '.php';
@@ -21,7 +23,9 @@ foreach ($routes as $pattern => $controllerAction) {
 }
 
 if (!$routeFound) {
-    echo '404 page not found';
+    $view = new View('default');
+    $view->renderHtml('err404.php', [], 404);
+    return;
 }
 
 unset($matches[0]);
