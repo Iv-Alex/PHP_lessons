@@ -32,7 +32,7 @@ abstract class ActiveRecordEntity
      */
     public static function getAllRecords(): array
     {
-        $db = new Db();
+        $db = Db::getInstance();
         return $db->query(
             'SELECT * FROM `' . static::getTableName() . '`;',
             [],
@@ -46,7 +46,7 @@ abstract class ActiveRecordEntity
     public static function getById(int $id): ?self
     {
 
-        $db = new Db();
+        $db = Db::getInstance();
 
         $recordById = $db->query(
             'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',

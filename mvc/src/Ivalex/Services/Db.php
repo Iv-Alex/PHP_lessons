@@ -4,13 +4,13 @@ namespace Ivalex\Services;
 
 class Db
 {
-
+    private static $instance;
     private $pdo;
 
     /**
-     * 
+     * db creates by the function getInstance
      */
-    public function __construct()
+    private function __construct()
     {
         $dbOptions = (require __DIR__ . '/../../settings.php')['db'];
 
@@ -20,6 +20,18 @@ class Db
             $dbOptions['password']
         );
         $this->pdo->exec('SET NAMES UTF8');
+    }
+
+    /**
+     * 
+     */
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     /**

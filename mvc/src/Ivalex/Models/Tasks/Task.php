@@ -51,14 +51,14 @@ class Task extends ActiveRecordEntity implements GetStatus
      */
     public function getStatus(): array
     {
-        $db = new Db();
-        
+        $db = Db::getInstance();
+
         $taskStatus = $db->query('SELECT * FROM `task_status` WHERE task_id=:task_id;', [':task_id' => $this->id]);
 
         // dynamically add the Caption property
         // can use for lang constants
         foreach ($taskStatus as $statusObject) {
-            $statusObject->caption = $this->status[$statusObject->status];
+            $statusObject->caption = $this->status[$statusObject->status] ?? $statusObject->status;
         }
 
         return $taskStatus;
