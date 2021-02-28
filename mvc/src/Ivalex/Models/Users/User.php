@@ -6,7 +6,6 @@ use Ivalex\Models\ActiveRecordEntity;
 
 class User extends ActiveRecordEntity
 {
-    protected $id;
     protected $name;
     protected $email;
     protected $pwdHash;

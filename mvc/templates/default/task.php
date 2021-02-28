@@ -9,7 +9,7 @@
                         <div><?= $task->getEmail() ?></div>
                     </div>
                     <div>
-                        <?php foreach ($taskStatus as $status) : ?>
+                        <?php foreach ($task->getStatus() as $status) : ?>
                             <div><?= $status->caption ?></div>
                         <?php endforeach; ?>
                     </div>

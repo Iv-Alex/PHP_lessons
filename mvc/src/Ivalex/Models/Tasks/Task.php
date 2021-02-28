@@ -21,19 +21,18 @@ interface GetStatus
  */
 class Task extends ActiveRecordEntity implements GetStatus
 {
-    protected $id;
-    private $name;
-    private $email;
-    private $text;
-    private $status = [
-        'complete' => 'Выполнено',
-        'edited' => 'Отредактировано администратором',
-    ];
-
+    protected $name;
+    protected $email;
+    protected $text;
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     public function getEmail(): string
@@ -41,9 +40,19 @@ class Task extends ActiveRecordEntity implements GetStatus
         return $this->email;
     }
 
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function setText(string $text)
+    {
+        $this->text = $text;
     }
 
     /**
@@ -51,6 +60,7 @@ class Task extends ActiveRecordEntity implements GetStatus
      */
     public function getStatus(): array
     {
+        $statusCaptions = (require __DIR__ . '/../../../captions.php')['taskStatus'];
         $db = Db::getInstance();
 
         $taskStatus = $db->query('SELECT * FROM `task_status` WHERE task_id=:task_id;', [':task_id' => $this->id]);
@@ -58,7 +68,7 @@ class Task extends ActiveRecordEntity implements GetStatus
         // dynamically add the Caption property
         // can use for lang constants
         foreach ($taskStatus as $statusObject) {
-            $statusObject->caption = $this->status[$statusObject->status] ?? $statusObject->status;
+            $statusObject->caption = $statusCaptions[$statusObject->status] ?? $statusObject->status;
         }
 
         return $taskStatus;
