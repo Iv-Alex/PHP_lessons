@@ -2,22 +2,57 @@
 
 namespace Ivalex\Controllers;
 
-use Ivalex\Views\View;
 use Ivalex\Models\Tasks\Task;
 
-class MainController
+use Ivalex\Views\View;
+
+/**
+ * @var int $cTasksOnPage tasks per page
+ * @var int $cPage count of pages
+ * @var int $page current page number
+ */
+class MainController extends BasicController
 {
 
-    private $view;
-
-    public function __construct()
+    public function main(int $page = 1, int $sortColumnNumber = 0, int $desc = 0)
     {
-        $this->view = new View('default');
+
+        $cTasks = Task::getRecordCount();
+        $cTasksOnPage = self::getOption('countRecordsOnPage');
+        $cPage = ceil($cTasks / $cTasksOnPage);
+        $page = static::checkPageNum($page, $cPage);
+        $indexedFields = Task::getFields();
+        if (!array_key_exists($sortColumnNumber, $indexedFields)) {
+            $sortColumnNumber = 0;
+        }
+        $sortColumn = $indexedFields[$sortColumnNumber];
+        $tasksOffset = ($page - 1) * $cTasksOnPage;
+        $tasks = Task::getRowsGroup($tasksOffset,$cTasksOnPage,$sortColumn,$desc);
+
+        $htmlParams = [
+            'tasks' => $tasks,
+            'showPageNav' => ($cPage > 1),
+            'activePage' => ($page),
+            'cPage' => $cPage,
+            'sortColumnNumber' => $sortColumnNumber,
+            'sortDesc' => $desc,
+            'indexedFields' => $indexedFields,
+        ];
+
+        $this->view->renderHtml('main.php', $htmlParams);
     }
 
-    public function main()
+    /**
+     * check page number limits
+     */
+    private static function checkPageNum(int $page, int $cPage): int
     {
-        $tasks = Task::getAllRecords();
-        $this->view->renderHtml('main.php', ['tasks' => $tasks]);
+        if ($page < 2) {
+            $page = 1;
+        } elseif ($page > $cPage) {
+            $page = $cPage;
+        }
+
+        return $page;
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 28, 2021 at 12:22 PM
+-- Generation Time: Mar 01, 2021 at 08:52 AM
 -- Server version: 10.3.13-MariaDB-log
 -- PHP Version: 7.4.14
 
@@ -40,8 +40,9 @@ CREATE TABLE `tasks` (
 
 INSERT INTO `tasks` (`id`, `name`, `email`, `text`) VALUES
 (1, 'user', 'test@test.ru', 'sadfad asdf asdfas asdfsdf asdf asfd s dfasdfasdf asdf asdf asd fasd fasdf'),
-(2, 'user1', 'test1@test.ru', 'sadfad asdfsdf hdf hd fhfsdf asdf asfd s dfasdfasdf asdf asdf asd fasd fasdf'),
-(3, 'user', 'test@test.ru', 'sadfad asdf adfffgdf asdf asdf asd fasd fasdf');
+(2, 'Mikhail', 'test1@test.ru', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.\r\n        Asperiores, debitis? Illum ullam eligendi exercitationem! Sunt esse reiciendis,\r\n        minus nemo sed totam in laboriosam. Ducimus, saepe. Ipsum vel aliquam sint quia!\r\n        FOOBAR'),
+(3, 'Mikhail', 'test@test.ru', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.\r\n        Asperiores, debitis? Illum ullam eligendi exercitationem! Sunt esse reiciendis,\r\n        minus nemo sed totam in laboriosam. Ducimus, saepe. Ipsum vel aliquam sint quia!\r\n        FOOBAR'),
+(6, 'Mikhail', 'Mikhail@test.ru', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.\r\n        Asperiores, debitis? Illum ullam eligendi exercitationem! Sunt esse reiciendis,\r\n        minus nemo sed totam in laboriosam. Ducimus, saepe. Ipsum vel aliquam sint quia!\r\n        FOOBAR');
 
 -- --------------------------------------------------------
 
@@ -75,16 +76,18 @@ CREATE TABLE `users` (
   `name` varchar(128) NOT NULL,
   `email` varchar(255) NOT NULL,
   `pwd_hash` varchar(255) NOT NULL,
-  `role` enum('admin','user') NOT NULL
+  `role` enum('admin','user') NOT NULL,
+  `auth_token` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `pwd_hash`, `role`) VALUES
-(1, 'admin', 'temp@logycon.ru', '123', 'admin'),
-(2, 'user', 'temp1@logycon.ru', '123', 'user');
+INSERT INTO `users` (`id`, `name`, `email`, `pwd_hash`, `role`, `auth_token`) VALUES
+(2, 'user', 'temp1@logycon.ru', '123', 'user', ''),
+(3, 'liga', 'tempaa@logycon.ru', '$2y$10$XLxsI7Au9..o8GADDEV7yeIRnPRH9sLqikmdXV4cew7J4/g9N4jiu', 'user', 'fdb2e488a772acd0f6262d804472840ac8261092906af9d3490c10c1f55ebdd1ea3ef3f2b5597149'),
+(4, 'admin', 'temp@logycon.ru', '$2y$10$2pGmHdVkL8chssD5P/fJxutusuxgMO4oNxXiLhB.o0dHjt24E2Jt2', 'user', 'aff107ec9c472607834abb1e0ed4a0635b538d549341f10e3bdaf66583b112280bfeeb416b465afc');
 
 --
 -- Indexes for dumped tables
@@ -118,7 +121,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `task_status`
@@ -130,7 +133,7 @@ ALTER TABLE `task_status`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

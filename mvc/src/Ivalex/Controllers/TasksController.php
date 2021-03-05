@@ -2,27 +2,18 @@
 
 namespace Ivalex\Controllers;
 
-use Ivalex\Views\View;
 use Ivalex\Models\Tasks\Task;
+use Ivalex\Exceptions\NotFoundException;
 
-class TasksController
+class TasksController extends BasicController
 {
-    private $view;
-
-    public function __construct()
-    {
-        $this->view = new View('default');
-    }
-
     public function view(int $taskId): void
     {
         $task = Task::getById($taskId);
 
         // if task not found
         if ($task === null) {
-            // create an error page and set the HTTP status code to 404
-            $this->view->renderHtml('err404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
 
         $this->view->renderHtml('task.php', ['task' => $task]);
@@ -33,9 +24,7 @@ class TasksController
         $task = Task::getById($taskId);
 
         if ($task === null) {
-            // create an error page and set the HTTP status code to 404
-            $this->view->renderHtml('err404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
 
         $task->setName('Mikhail');
@@ -56,7 +45,8 @@ class TasksController
         Asperiores, debitis? Illum ullam eligendi exercitationem! Sunt esse reiciendis,
         minus nemo sed totam in laboriosam. Ducimus, saepe. Ipsum vel aliquam sint quia!
         FOOBAR');
-
-        $task->save();
+        $this->view->setVar('header', 'Создание задачи');
+        $this->view->renderHtml('editTask.php', ['task' => $task]);
+        //        $task->save();
     }
 }

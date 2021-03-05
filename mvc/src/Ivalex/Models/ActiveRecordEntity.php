@@ -31,19 +31,47 @@ abstract class ActiveRecordEntity
      * contract
      * @return string tableName
      */
+
     abstract protected static function getTableName(): string;
+
+    /**
+     * using for sorting
+     * @return array of indexed fields
+     */
+    public static function getFields(): array
+    {
+        $fields=array();
+        $sql = 'DESCRIBE `' . static::getTableName() . '`;';
+
+        $db = Db::getInstance();
+        $result =  $db->query($sql);
+        foreach ($result as $key => $fieldObject)
+        {
+            $fields[$key] = $fieldObject->Field;
+        }
+
+        return $fields;
+    }
+
+    public static function getRecordCount(): int
+    {
+        $sql = 'SELECT COUNT(`id`) AS `cRecords` FROM `' . static::getTableName() . '`;';
+
+        $db = Db::getInstance();
+        $result = $db->query($sql);
+
+        return $result[0]->cRecords;
+    }
 
     /**
      * 
      */
     public static function getAllRecords(): array
     {
+        $sql = 'SELECT * FROM `' . static::getTableName() . '`;';
+
         $db = Db::getInstance();
-        return $db->query(
-            'SELECT * FROM `' . static::getTableName() . '`;',
-            [],
-            static::class
-        );
+        return $db->query($sql, [], static::class);
     }
 
     /**
@@ -51,15 +79,41 @@ abstract class ActiveRecordEntity
      */
     public static function getById(int $id): ?self
     {
+        $sql = 'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;';
+        $params = [':id' => $id];
 
         $db = Db::getInstance();
-
-        $recordById = $db->query(
-            'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
-            [':id' => $id],
-            static::class
-        );
+        $recordById = $db->query($sql, $params, static::class);
         return $recordById ? $recordById[0] : null;
+    }
+
+    /**
+     * SELECT *
+     *   FROM _table_name_
+     *   ORDER BY $orderColumn $descOrder[ASC, DESC]
+     *   LIMIT $offset, $countFetch
+     */
+    public static function getRowsGroup(int $offset, int $countFetch, string $orderColumn = 'id', bool $descOrder = false): array
+    {
+        $sql = 'SELECT * FROM `' . static::getTableName() . '` ' .
+            'ORDER BY `' . $orderColumn . '` ' . ($descOrder ? 'DESC ' : 'ASC ') .
+            'LIMIT ' . $offset . ', ' . $countFetch . ';';
+
+        $db = Db::getInstance();
+        return $db->query($sql, [], static::class);
+    }
+
+    public static function findOneByColumn(string $columnName, $value): ?self
+    {
+        $sql = 'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value LIMIT 1;';
+        $params = [':value' => $value];
+
+        $db = Db::getInstance();
+        $result = $db->query($sql, $params, static::class);
+        if ($result === []) {
+            return null;
+        }
+        return $result[0];
     }
 
     public function save()
@@ -74,26 +128,37 @@ abstract class ActiveRecordEntity
 
     private function update(array $tableParams): void
     {
-        $db = Db::getInstance();
 
         $sql = 'UPDATE `' . static::getTableName() . '`' .
             ' SET ' . implode(', ', $tableParams['sqlColumnsParams']) .
             ' WHERE id=:id';
 
+        $db = Db::getInstance();
+        $db->query($sql, $tableParams['paramsValues']);
+
         // TODO edited by admin
 
-        $db->query($sql, $tableParams['paramsValues']);
     }
 
     private function insert(array $tableParams): void
     {
-        $db = Db::getInstance();
-
         $sql = 'INSERT INTO `' . static::getTableName() . '` ' .
             '(' . implode(', ', $tableParams['columns']) . ') ' .
             'VALUES (' . implode(', ', $tableParams['params']) . ')';
 
+        $db = Db::getInstance();
         $db->query($sql, $tableParams['paramsValues']);
+        $this->id = $db->getLastInsertId();
+    }
+
+    public function delete(): void
+    {
+        $sql = 'DELETE FROM `' . static::getTableName() . '` WHERE id = :id';
+        $params = [':id' => $this->id];
+
+        $db = Db::getInstance();
+        $db->query($sql, $params);
+        $this->id = null;
     }
 
     /**

@@ -2,21 +2,35 @@
 
 namespace Ivalex\Views;
 
+/**
+ * @var string $templatePath
+ * @var array $extraVars - additional preset vars
+ */
 class View
 {
     private $templatePath;
+    private $extraVars = [];
 
     public function __construct(string $templateDir)
     {
-        $templatesPath = __DIR__ . (require __DIR__ . '/../../settings.php')['templatesPath'];
+        $templatesPath = __DIR__ . '/../../../templates';
         $this->templatePath = $templatesPath . '/' . $templateDir;
     }
 
     //! delete it
-    public static function echoIt($anything) {
+    public static function echoIt($anything)
+    {
         echo '<pre>';
         var_dump($anything);
         echo '</pre>';
+    }
+
+    /**
+     * Add variables before rendering the page
+     */
+    public function setVar(string $name, $value): void
+    {
+        $this->extraVars[$name] = $value;
     }
 
     /**
@@ -29,6 +43,8 @@ class View
     {
         // send processed HTTP status code
         http_response_code($httpStatusCode);
+        // get additional preset vars
+        extract($this->extraVars);
         // get variables
         extract($vars);
 

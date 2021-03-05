@@ -4,8 +4,11 @@ return [
     'db' => [
         'host' => 'localhost',
         'dbname' => 'iv_alex',
-        'user' => 'root',
-        'password' => 'root',
+        'user' => 'beejeepadavan',
+        'password' => 'Yu_zefREG5EEdTX',
     ],
-    'templatesPath' => '/../../../templates',
+    'ApplicationOptions' => [
+        'template' => 'default',
+        'countRecordsOnPage' => 3,
+    ],
 ];

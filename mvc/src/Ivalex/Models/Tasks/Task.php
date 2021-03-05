@@ -24,6 +24,7 @@ class Task extends ActiveRecordEntity implements GetStatus
     protected $name;
     protected $email;
     protected $text;
+    protected $status;
 
     public function getName(): string
     {
@@ -60,18 +61,18 @@ class Task extends ActiveRecordEntity implements GetStatus
      */
     public function getStatus(): array
     {
-        $statusCaptions = (require __DIR__ . '/../../../captions.php')['taskStatus'];
         $db = Db::getInstance();
-
-        $taskStatus = $db->query('SELECT * FROM `task_status` WHERE task_id=:task_id;', [':task_id' => $this->id]);
-
-        // dynamically add the Caption property
-        // can use for lang constants
-        foreach ($taskStatus as $statusObject) {
-            $statusObject->caption = $statusCaptions[$statusObject->status] ?? $statusObject->status;
-        }
+        $taskStatus = $db->query(
+            'SELECT * FROM `task_status` WHERE (`binary_id` & :task_status);',
+            [':task_status' => $this->status]
+        );
 
         return $taskStatus;
+    }
+
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
     }
 
     /**

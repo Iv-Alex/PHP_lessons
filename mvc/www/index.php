@@ -4,35 +4,60 @@ error_reporting(E_ALL);
 
 use Ivalex\Views\View;
 
-// autoload
-spl_autoload_register(function (string $className) {
-    require_once __DIR__ .  '/../src/' . str_replace('\\', '/', $className) . '.php';
-});
+try {
+    // autoload
+    spl_autoload_register(function (string $className) {
+        require_once __DIR__ .  '/../src/' . str_replace('\\', '/', $className) . '.php';
+    });
 
-// routing
-$route = $_GET['route'] ?? '';
-$routes = require __DIR__ . '/../src/routes.php';
+    // routing
+    $route = strtolower($_GET['route'] ?? '');
 
-$routeFound = false;
-foreach ($routes as $pattern => $controllerAction) {
-    preg_match($pattern, $route, $matches);
-    if (!empty($matches)) {
-        $routeFound = true;
-        break;
+    $routes = require __DIR__ . '/../src/routes.php';
+
+    $routeFound = false;
+    foreach ($routes as $pattern => $controllerAction) {
+        preg_match($pattern, $route, $matches);
+        if (!empty($matches)) {
+            $routeFound = true;
+            break;
+        }
     }
-}
 
-if (!$routeFound) {
+    if (!$routeFound) {
+        throw new Ivalex\Exceptions\NotFoundException();
+    }
+
+    unset($matches[0]);
+
+    // get the required controller name
+    $controllerName = $controllerAction[0];
+    // get the required action
+    $actionName = $controllerAction[1];
+    // create the controller's object and launch the action
+    $controller = new $controllerName();
+
+  //  View::echoIt($matches);
+
+    $controller->$actionName(...$matches);
+} catch (Ivalex\Exceptions\DbException $e) {
     $view = new View('default');
-    $view->renderHtml('err404.php', [], 404);
-    return;
+    $view->renderHtml(
+        'error.php',
+        [
+            'errorCode' => $e->getCode(),
+            'errorMessage' => $e->getMessage(),
+        ],
+        500
+    );
+} catch (Ivalex\Exceptions\NotFoundException $e) {
+    $view = new View('default');
+    $view->renderHtml(
+        'error.php',
+        [
+            'errorCode' => $e->getCode(),
+            'errorMessage' => $e->getMessage(),
+        ],
+        404
+    );
 }
-
-unset($matches[0]);
-
-$controllerName = $controllerAction[0];
-$actionName = $controllerAction[1];
-
-$controller = new $controllerName();
-$controller->$actionName(...$matches);
-
