@@ -14,11 +14,11 @@ class View
     private $extraVars = [];
     private static $messages = array();
 
-    public function __construct(string $templateDir)
+    public function __construct(string $templateDir, bool $useMessenges = true)
     {
         $templatesPath = __DIR__ . '/../../../templates';
         $this->templatePath = $templatesPath . '/' . $templateDir;
-        if (empty(self::$messages)) {
+        if ($useMessenges && empty(self::$messages)) {
             self::$messages = include __DIR__ . '/Lang/' . BasicController::getOption('language') . '/messages.php';
         }
     }
@@ -72,7 +72,6 @@ class View
         // send the page to user
 
         View::echoIt('-------------------------- XSS attacks in forms (before send params for save)');
-        View::echoIt('---error design --------');
         View::echoIt('---delete tasks --------');
 
         echo $buffer;

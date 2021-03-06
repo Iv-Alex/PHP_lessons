@@ -14,7 +14,7 @@
 <body>
     <div class="d-flex container justify-content-center align-items-center">
         <main class="p-3 col-sm-6">
-            <div class="card text-white bg-danger" style="max-width: 18rem;">
+            <div class="card text-white bg-danger">
                 <div class="card-header">Error</div>
                 <div class="card-body">
                     <h5 class="card-title"><?= $errorCode ?></h5>

@@ -52,7 +52,7 @@ try {
 
 function showErrorPage($e)
 {
-    $view = new View('default');
+    $view = new View('default', false);
     $view->renderHtml(
         'error.php',
         [
