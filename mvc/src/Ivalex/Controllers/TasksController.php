@@ -4,6 +4,9 @@ namespace Ivalex\Controllers;
 
 use Ivalex\Models\Tasks\Task;
 use Ivalex\Exceptions\NotFoundException;
+use Ivalex\Exceptions\UnauthorizedException;
+use Ivalex\Exceptions\BadValueException;
+use Ivalex\Exceptions\ForbiddenException;
 
 class TasksController extends BasicController
 {
@@ -19,34 +22,73 @@ class TasksController extends BasicController
         $this->view->renderHtml('task.php', ['task' => $task]);
     }
 
-    public function edit($taskId): void
+    /**
+     * 
+     */
+    public function edit(int $taskId): void
     {
         $task = Task::getById($taskId);
-
         if ($task === null) {
             throw new NotFoundException();
         }
 
-        $task->setName('Mikhail');
-        $task->setText('Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-        Asperiores, debitis? Illum ullam eligendi exercitationem! Sunt esse reiciendis,
-        minus nemo sed totam in laboriosam. Ducimus, saepe. Ipsum vel aliquam sint quia!
-        FOOBAR');
+        if ($this->user === null) {
+            throw new UnauthorizedException();
+        } elseif ($this->user->getRole() != 'admin') {
+            throw new ForbiddenException();
+        }
 
-        $task->save();
+        if (isset($_POST['updatetask'])) {
+            try {
+                $task->updateTask($_POST);
+                /*
+                $user = User::signUp([
+                    'username' => $_POST['username'],
+                    'email' => $_POST['email'],
+                    'password' => $_POST['password'],
+                ]);
+                */
+            } catch (BadValueException $e) {
+                $this->view->renderHtml(
+                    'editTask.php',
+                    [
+                        'error' => $e->getMessage(),
+                        'task' => $task,
+                    ]
+                );
+                return;
+            }
+            header('Location: /tasks/' . $task->getId(), true, 302);
+            exit();
+        }
+
+        $this->view->renderHtml('editTask.php', ['task' => $task]);
     }
 
+    /**
+     * 
+     */
     public function add(): void
     {
-        $task = new Task();
-        $task->setName('Mikhail');
-        $task->setEmail('Mikhail@test.ru');
-        $task->setText('Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-        Asperiores, debitis? Illum ullam eligendi exercitationem! Sunt esse reiciendis,
-        minus nemo sed totam in laboriosam. Ducimus, saepe. Ipsum vel aliquam sint quia!
-        FOOBAR');
-        $this->view->setVar('header', 'Создание задачи');
-        $this->view->renderHtml('editTask.php', ['task' => $task]);
-        //        $task->save();
+
+        if (isset($_POST['addtask'])) {
+            try {
+                $task = Task::createTask($_POST);
+                /*
+                $user = User::signUp([
+                    'username' => $_POST['username'],
+                    'email' => $_POST['email'],
+                    'password' => $_POST['password'],
+                ]);
+                */
+            } catch (BadValueException $e) {
+                $this->view->renderHtml('addTask.php', ['error' => $e->getMessage()]);
+                return;
+            }
+            header('Location: /tasks/' . $task->getId(), true, 302);
+            exit();
+        }
+
+        $this->view->renderHtml('addTask.php');
     }
 }

@@ -8,26 +8,38 @@
         <form action="" method="post">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="username" class="form-label">* Имя пользователя (nickname)</label>
+                    <label for="username" class="form-label">Имя пользователя (nickname)</label>
                     <div class="input-group mb-6">
                         <span class="input-group-text" id="basic-addon1">@</span>
-                        <input id="username" name="username" type="text" class="form-control" placeholder="nickname" aria-label="Username" value="<?= $_POST['username'] ?? '' ?>" required>
+                        <input id="username" name="username" type="text" class="form-control" placeholder="nickname" aria-label="Username" value="<?= $task->getName() ?>" disabled>
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">* Адрес e-mail</label>
-                    <input id="email" name="email" type="email" class="form-control" placeholder="example@example.com" aria-describedby="emailHelp" value="<?= $_POST['email'] ?? '' ?>" required>
+                    <label for="email" class="form-label">Адрес e-mail</label>
+                    <input id="email" name="email" type="email" class="form-control" placeholder="example@example.com" aria-describedby="emailHelp" value="<?= $task->getEmail() ?>" disabled>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="task_text" class="form-label">* Текст задачи</label>
-                <textarea class="form-control" id="task_text" name="tasktext" rows="3"><?= $_POST['tasktext'] ?? '' ?></textarea>
+                <label for="text" class="form-label">* Текст задачи</label>
+                <textarea class="form-control" id="text" name="text" rows="3" required><?= $_POST['text'] ?? $task->getText() ?></textarea>
+            </div>
+            <div class="mb-3">
+                <?php foreach ($task->getStatus(true) as $status) : ?>
+                    <?php if ($status->setting != 'unactive') : ?>
+                        <div class="form-check">
+                            <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->binary_id ?>" id="chbox<?= $status->id ?>" <?= ($status->setting != 'in_form') ? ' disabled' : '' ?><?= ($status->checked) ? ' checked' : '' ?>>
+                            <label class="form-check-label" for="chbox<?= $status->id ?>">
+                                <?= $status->status ?>
+                            </label>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             </div>
             <div class="mb-3">
                 <div class="form-text">* - обязательные к заполнению поля</div>
             </div>
             <div class="text-center">
-                <button type="submit" name="save" class="btn btn-primary">Сохранить</button>
+                <button type="submit" name="updatetask" class="btn btn-primary">Сохранить</button>
             </div>
         </form>
     </main>

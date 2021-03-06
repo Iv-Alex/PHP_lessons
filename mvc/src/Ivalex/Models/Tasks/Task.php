@@ -4,22 +4,15 @@ namespace Ivalex\Models\Tasks;
 
 use Ivalex\Models\ActiveRecordEntity;
 use Ivalex\Services\Db;
+use Ivalex\Exceptions\BadValueException;
 
 
 use Ivalex\Views\View;
 
 /**
- * 
- */
-interface GetStatus
-{
-    public function getStatus(): array;
-}
-
-/**
  * other properties will add automatically
  */
-class Task extends ActiveRecordEntity implements GetStatus
+class Task extends ActiveRecordEntity
 {
     protected $name;
     protected $email;
@@ -59,15 +52,18 @@ class Task extends ActiveRecordEntity implements GetStatus
     /**
      * 
      */
-    public function getStatus(): array
+    public function getStatus(bool $allRecords = false): array
     {
-        $db = Db::getInstance();
-        $taskStatus = $db->query(
-            'SELECT * FROM `task_status` WHERE (`binary_id` & :task_status);',
-            [':task_status' => $this->status]
-        );
+        if ($allRecords) {
+            $sql = 'SELECT `a`.*, `b`.`checked` FROM `task_status` AS `a` LEFT OUTER JOIN' .
+                '(SELECT `id`, 1 AS `checked` FROM `task_status` WHERE (`binary_id` & :task_status)) AS `b`' .
+                'ON `a`.`id`=`b`.`id`;';
+        } else {
+            $sql = 'SELECT * FROM `task_status` WHERE (`binary_id` & :task_status);';
+        }
 
-        return $taskStatus;
+        $db = Db::getInstance();
+        return $db->query($sql, [':task_status' => $this->status]);
     }
 
     public function setStatus(int $status)
@@ -75,6 +71,54 @@ class Task extends ActiveRecordEntity implements GetStatus
         $this->status = $status;
     }
 
+    /**
+     * 
+     */
+    public static function createTask(array $taskData): Task
+    {
+        if (empty($taskData['username'])) {
+            throw new BadValueException('Не передано имя пользоателя');
+        }
+        if (empty($taskData['email'])) {
+            throw new BadValueException('Не передан адрес электронной почты');
+        }
+        if (empty($taskData['text'])) {
+            throw new BadValueException('Не передан текст задачи');
+        }
+
+        $task = new Task();
+
+        $task->setName($taskData['username']);
+        $task->setEmail($taskData['email']);
+        $task->setText($taskData['text']);
+        $task->setStatus(0);
+
+        $task->save();
+
+        return $task;
+    }
+
+    /**
+     * 
+     */
+    public function updateTask(array $taskData): Task
+    {
+        if (empty($taskData['text'])) {
+            throw new BadValueException('Не передан текст задачи');
+        }
+
+        $edited = ($this->getText() != $taskData['text']);
+        $status = 0;
+
+View::echoIt($taskData);
+exit;
+        $this->setText($taskData['text']);
+        $this->setStatus($status);
+
+        $this->save();
+
+        return $this;
+    }
     /**
      * contract
      */

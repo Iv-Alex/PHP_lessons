@@ -55,6 +55,10 @@ class View
         ob_end_clean();
 
         // send the page to user
+
+        View::echoIt('-------------------------- XSS attacks in forms (before send params for save)');
+        View::echoIt('---error width --------');
+
         echo $buffer;
     }
 }

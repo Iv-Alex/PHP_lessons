@@ -37,20 +37,21 @@ try {
     // create the controller's object and launch the action
     $controller = new $controllerName();
 
-  //  View::echoIt($matches);
+    //  View::echoIt($matches);
 
     $controller->$actionName(...$matches);
 } catch (Ivalex\Exceptions\DbException $e) {
-    $view = new View('default');
-    $view->renderHtml(
-        'error.php',
-        [
-            'errorCode' => $e->getCode(),
-            'errorMessage' => $e->getMessage(),
-        ],
-        500
-    );
+    showErrorPage($e);
 } catch (Ivalex\Exceptions\NotFoundException $e) {
+    showErrorPage($e);
+} catch (Ivalex\Exceptions\UnauthorizedException $e) {
+    showErrorPage($e);
+} catch (Ivalex\Exceptions\ForbiddenException $e) {
+    showErrorPage($e);
+}
+
+function showErrorPage($e)
+{
     $view = new View('default');
     $view->renderHtml(
         'error.php',
@@ -58,6 +59,6 @@ try {
             'errorCode' => $e->getCode(),
             'errorMessage' => $e->getMessage(),
         ],
-        404
+        $e->getCode()
     );
 }

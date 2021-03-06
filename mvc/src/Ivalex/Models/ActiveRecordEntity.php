@@ -35,10 +35,10 @@ abstract class ActiveRecordEntity
     abstract protected static function getTableName(): string;
 
     /**
-     * using for sorting
+     * @param bool $byFieldName if true, then returns an array indexed by fieldnames, otherwise indexed in schema order
      * @return array of indexed fields
      */
-    public static function getFields(): array
+    public static function getFields(bool $byFieldName = false): array
     {
         $fields=array();
         $sql = 'DESCRIBE `' . static::getTableName() . '`;';
@@ -47,7 +47,11 @@ abstract class ActiveRecordEntity
         $result =  $db->query($sql);
         foreach ($result as $key => $fieldObject)
         {
-            $fields[$key] = $fieldObject->Field;
+            if ($byFieldName) {
+                $fields[$fieldObject->Field] = $key;
+            } else {
+                $fields[$key] = $fieldObject->Field;
+            }
         }
 
         return $fields;

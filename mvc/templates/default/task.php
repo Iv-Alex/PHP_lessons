@@ -10,14 +10,14 @@
                     </div>
                     <div>
                         <?php foreach ($task->getStatus() as $status) : ?>
-                            <div><?= $status->caption ?></div>
+                            <div><?= $status->status ?></div>
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
             <div class="card-body">
                 <p class="card-text"><?= $task->getText() ?></p>
-                <button class="btn btn-primary">Go somewhere</button>
+                <a href="/" class="btn btn-primary">Вернуться на главную</a>
             </div>
         </div>
     </main>
