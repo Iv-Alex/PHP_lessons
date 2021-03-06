@@ -5,6 +5,9 @@ namespace Ivalex\Controllers;
 use Ivalex\Models\Users\UsersAuthService;
 use Ivalex\Views\View;
 
+/**
+ * basic
+ */
 abstract class BasicController
 {
     private static $appOptions = array();
@@ -13,7 +16,9 @@ abstract class BasicController
 
     public function __construct()
     {
-        self::$appOptions = (require __DIR__ . '/../../settings.php')['ApplicationOptions'];
+        if (empty(self::$appOptions)) {
+            self::$appOptions = (require __DIR__ . '/../../settings.php')['ApplicationOptions'];
+        }
         $this->user = UsersAuthService::getUserByToken();
         $this->view = new View(self::$appOptions['template']);
         $this->view->setVar('user', $this->user);

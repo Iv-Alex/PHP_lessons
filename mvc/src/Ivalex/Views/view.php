@@ -2,6 +2,8 @@
 
 namespace Ivalex\Views;
 
+use Ivalex\Controllers\BasicController;
+
 /**
  * @var string $templatePath
  * @var array $extraVars - additional preset vars
@@ -10,11 +12,15 @@ class View
 {
     private $templatePath;
     private $extraVars = [];
+    private static $messages = array();
 
     public function __construct(string $templateDir)
     {
         $templatesPath = __DIR__ . '/../../../templates';
         $this->templatePath = $templatesPath . '/' . $templateDir;
+        if (empty(self::$messages)) {
+            self::$messages = include __DIR__ . '/Lang/' . BasicController::getOption('language') . '/messages.php';
+        }
     }
 
     //! delete it
@@ -23,6 +29,15 @@ class View
         echo '<pre>';
         var_dump($anything);
         echo '</pre>';
+    }
+
+    /**
+     * @param string $messageIdentity message name format: 'CLASSNAME_MESSAGEID' MESSAGEID is integer
+     * @return string message value
+     */
+    public static function getMessage(string $messageIdentity): string
+    {
+        return self::$messages[$messageIdentity];
     }
 
     /**

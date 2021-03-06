@@ -10,5 +10,6 @@ return [
     'ApplicationOptions' => [
         'template' => 'default',
         'countRecordsOnPage' => 3,
+        'language' => 'RU',
     ],
 ];
