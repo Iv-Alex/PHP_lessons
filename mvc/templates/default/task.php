@@ -6,14 +6,16 @@
         <?php endif; ?>
         <div class="card">
             <div class="card-header">
-                <div class="d-flex justify-content-between">
-                    <div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div><?= $task->getName() ?></div>
                         <div><?= $task->getEmail() ?></div>
                     </div>
-                    <div>
+                    <div class="col-md-6">
                         <?php foreach ($task->getStatus() as $status) : ?>
-                            <div><?= $status->status ?></div>
+                            <?php if ($status->setting != 'unactive') : ?>
+                                <div class="badge rounded-pill bg-success bg-gradient text-light m-1"><?= $status->status ?></div>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
                 </div>

@@ -85,7 +85,7 @@ class MainController extends BasicController
         ];
         foreach ($tableHeaders as $fieldName => $fieldAttributes) {
             if ($indexedFields[$fieldName] == $sortFieldId) {
-                $sortDesc = !$isSortDesc;
+                $sortDesc = abs($isSortDesc-1);
                 $tableHeaders[$fieldName]['sortIconStyle'] = $sortIconStyle[$isSortDesc];
             } else {
                 $sortDesc = 0;

@@ -5,7 +5,7 @@
             <a class="btn btn-outline-primary" href="/Tasks/add">Добавить задачу</a>
         </div>
     </div>
-    <table class="table table-primary table-striped">
+    <table class="table table-info table-striped">
         <thead>
             <tr>
                 <?php foreach ($tableHeaders as $th) : ?>
@@ -26,11 +26,15 @@
                     <td><?= $task->getEmail() ?></td>
                     <td><?= $task->getText() ?></td>
                     <td>
-                        <?php foreach ($task->getStatus() as $status) {
-                            echo $status->status . '<br>';
-                        } ?>
+                        <?php foreach ($task->getStatus() as $status) : ?>
+                            <?php if ($status->setting != 'unactive') : ?>
+                                <span class="badge rounded-pill bg-success bg-gradient text-light m-1"><?= $status->status ?></span>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                         <?php if (!empty($user) && ($user->getRole() == 'admin')) : ?>
-                            <a class="btn-link" href="/tasks/<?= $task->getId() ?>/edit">Изменить</a>
+                            <div>
+                                <a class="btn-link" href="/tasks/<?= $task->getId() ?>/edit">Изменить</a>
+                            </div>
                         <?php endif; ?>
                     </td>
                 </tr>

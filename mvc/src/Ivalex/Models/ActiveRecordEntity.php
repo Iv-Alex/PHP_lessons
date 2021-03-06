@@ -40,13 +40,12 @@ abstract class ActiveRecordEntity
      */
     public static function getFields(bool $byFieldName = false): array
     {
-        $fields=array();
+        $fields = array();
         $sql = 'DESCRIBE `' . static::getTableName() . '`;';
 
         $db = Db::getInstance();
         $result =  $db->query($sql);
-        foreach ($result as $key => $fieldObject)
-        {
+        foreach ($result as $key => $fieldObject) {
             if ($byFieldName) {
                 $fields[$fieldObject->Field] = $key;
             } else {
@@ -202,5 +201,31 @@ abstract class ActiveRecordEntity
     private static function camelCaseToUnderscore(string $camelCaseString): string
     {
         return strtolower(preg_replace('~(?<!^)[A-Z]~', '_$0', $camelCaseString));
+    }
+
+    /**
+     * For use in the SQL construction ...WHERE <$field> IN (<$values>)...
+     * Convets the array $values to SQL blocks '[OR] (<$field> < =|like > :param<1..N>)'
+     * and array of params [':param<1..N>'=><$values>]
+     * @param string $field
+     * @param array $values
+     * @param string $operator comparison operator such as '=' or 'like'
+     * @return array ['sql' => (string) SQL_query_blocks, 'params' => (array) [SQL_params_values]]
+     */
+    protected static function arrayPreparedStatements(string $field, array $values, string $operator = '='): array
+    {
+        $params = array();
+        if (empty($values)) {
+            $sql = '`' . $field . '` IN (\'\')';
+        } else {
+            $sqlBlocks = array();
+            foreach ($values as $key => $value) {
+                $sqlBlocks[] = '(`' . $field . '`' . $operator . ':param' . $key . ')';
+                $params[':param' . $key] = $value;
+            }
+            $sql = implode(' OR ', $sqlBlocks);
+        }
+
+        return ['sql' => $sql, 'params' => $params];
     }
 }

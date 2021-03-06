@@ -23,14 +23,6 @@ class View
         }
     }
 
-    //! delete it
-    public static function echoIt($anything)
-    {
-        echo '<pre>';
-        var_dump($anything);
-        echo '</pre>';
-    }
-
     /**
      * @param string $messageIdentity message name
      * @return string message value
@@ -70,10 +62,6 @@ class View
         ob_end_clean();
 
         // send the page to user
-
-        View::echoIt('-------------------------- XSS attacks in forms (before send params for save)');
-        View::echoIt('---delete tasks --------');
-
         echo $buffer;
     }
 }

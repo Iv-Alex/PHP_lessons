@@ -23,6 +23,8 @@ class Db
                 $dbOptions['password']
             );
             $this->pdo->exec('SET NAMES UTF8');
+            //$this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+            //$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             throw new DbException('Database connection error: ' . $e->getMessage(), $e->getCode());
         }

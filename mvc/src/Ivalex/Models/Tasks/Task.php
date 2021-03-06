@@ -68,13 +68,13 @@ class Task extends ActiveRecordEntity
 
     public function setStatus(array $status = [], bool $edited = false)
     {
-        $statusArrayString = empty($status) ? '""' : implode(',', $status);
-        $sql = 'SELECT SUM(`binary_id`) AS `summary` FROM `task_status`' .
-            ' WHERE (`id` IN (' . $statusArrayString . '))';
+        $preparedStatements = self::arrayPreparedStatements('id', $status);
+
+        $sql = 'SELECT SUM(`binary_id`) AS `summary` FROM `task_status` WHERE ' . $preparedStatements['sql'];
         $sql .= $edited ? ' OR (`setting` LIKE "on_edit");' : ';';
 
         $db = Db::getInstance();
-        $result = $db->query($sql);
+        $result = $db->query($sql, $preparedStatements['params']);
 
         $this->status = empty($result[0]) ? 0 : intval($result[0]->summary);
     }

@@ -36,7 +36,7 @@
                         <?php elseif ($status->checked) : ?>
                             <div class="form-check">
                                 <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->id ?>" id="chbox<?= $status->id ?>" hidden checked>
-                                <label class="form-check-label" for="chbox<?= $status->id ?>">
+                                <label class="form-check-label badge rounded-pill bg-success bg-gradient text-light m-1" for="chbox<?= $status->id ?>">
                                     <?= $status->status ?>
                                 </label>
                             </div>
