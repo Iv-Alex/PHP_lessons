@@ -30,7 +30,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->id ?>" id="chbox<?= $status->id ?>" <?= ($status->checked) ? ' checked' : '' ?>>
                                 <label class="form-check-label" for="chbox<?= $status->id ?>">
-                                    <?= $status->status ?>ddddd
+                                    <?= $status->status ?>
                                 </label>
                             </div>
                         <?php elseif ($status->checked) : ?>
