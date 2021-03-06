@@ -32,7 +32,7 @@ class View
     }
 
     /**
-     * @param string $messageIdentity message name format: 'CLASSNAME_MESSAGEID' MESSAGEID is integer
+     * @param string $messageIdentity message name
      * @return string message value
      */
     public static function getMessage(string $messageIdentity): string

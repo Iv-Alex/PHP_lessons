@@ -7,11 +7,13 @@ use Ivalex\Exceptions\NotFoundException;
 use Ivalex\Exceptions\UnauthorizedException;
 use Ivalex\Exceptions\BadValueException;
 use Ivalex\Exceptions\ForbiddenException;
+use Ivalex\Views\View;
 
 class TasksController extends BasicController
 {
-    public function view(int $taskId): void
+    public function view(int $taskId, int $messageId = null): void
     {
+
         $task = Task::getById($taskId);
 
         // if task not found
@@ -19,6 +21,9 @@ class TasksController extends BasicController
             throw new NotFoundException();
         }
 
+        if ($messageId !== null) {
+            $this->view->setVar('success', View::getMessage('TASK_' . $messageId));
+        }
         $this->view->renderHtml('task.php', ['task' => $task]);
     }
 
@@ -58,7 +63,7 @@ class TasksController extends BasicController
                 );
                 return;
             }
-            header('Location: /tasks/' . $task->getId(), true, 302);
+            header('Location: /tasks/' . $task->getId() . '/message/1', true, 302);
             exit();
         }
 
@@ -85,7 +90,7 @@ class TasksController extends BasicController
                 $this->view->renderHtml('addTask.php', ['error' => $e->getMessage()]);
                 return;
             }
-            header('Location: /tasks/' . $task->getId(), true, 302);
+            header('Location: /tasks/' . $task->getId() . '/message/0', true, 302);
             exit();
         }
 
