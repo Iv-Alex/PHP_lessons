@@ -26,12 +26,21 @@
             <div class="mb-3">
                 <?php foreach ($task->getStatus(true) as $status) : ?>
                     <?php if ($status->setting != 'unactive') : ?>
-                        <div class="form-check">
-                            <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->id ?>" id="chbox<?= $status->id ?>" <?= ($status->setting != 'in_form') ? ' disabled' : '' ?><?= ($status->checked) ? ' checked' : '' ?>>
-                            <label class="form-check-label" for="chbox<?= $status->id ?>">
-                                <?= $status->status ?>
-                            </label>
-                        </div>
+                        <?php if ($status->setting == 'in_form') : ?>
+                            <div class="form-check">
+                                <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->id ?>" id="chbox<?= $status->id ?>" <?= ($status->checked) ? ' checked' : '' ?>>
+                                <label class="form-check-label" for="chbox<?= $status->id ?>">
+                                    <?= $status->status ?>ddddd
+                                </label>
+                            </div>
+                        <?php elseif ($status->checked) : ?>
+                            <div class="form-check">
+                                <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->id ?>" id="chbox<?= $status->id ?>" hidden checked>
+                                <label class="form-check-label" for="chbox<?= $status->id ?>">
+                                    <?= $status->status ?>
+                                </label>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
