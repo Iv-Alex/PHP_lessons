@@ -57,7 +57,8 @@ class View
         // send the page to user
 
         View::echoIt('-------------------------- XSS attacks in forms (before send params for save)');
-        View::echoIt('---error width --------');
+        View::echoIt('---error design --------');
+        View::echoIt('---delete tasks --------');
 
         echo $buffer;
     }

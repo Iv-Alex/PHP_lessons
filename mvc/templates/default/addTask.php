@@ -1,7 +1,7 @@
 <?php include __DIR__ . '/header.php'; ?>
 <div class="d-flex justify-content-center align-items-center">
     <main class="container">
-        <h1><?= $header ?? '' ?></h1>
+    <h1 class="display-6">Создание задачи</h1>
         <?php if (!empty($error)) : ?>
             <div class="alert alert-danger" role="alert"><?= $error ?></div>
         <?php endif; ?>
@@ -30,5 +30,8 @@
                 <button type="submit" name="addtask" class="btn btn-primary">Сохранить</button>
             </div>
         </form>
+        <div>
+            <a href="/">Вернуться на главную</a>
+        </div>
     </main>
 </div><?php include __DIR__ . '/footer.php'; ?>

@@ -26,11 +26,11 @@
                     <td><?= $task->getEmail() ?></td>
                     <td><?= $task->getText() ?></td>
                     <td>
-                        <?php foreach ($task->getStatus(true) as $status) {
+                        <?php foreach ($task->getStatus() as $status) {
                             echo $status->status . '<br>';
                         } ?>
                         <?php if (!empty($user) && ($user->getRole() == 'admin')) : ?>
-                            <a class="btn btn-outline-primary" href="/tasks/<?= $task->getId() ?>/edit">Редактировать задачу</a>
+                            <a class="btn-link" href="/tasks/<?= $task->getId() ?>/edit">Изменить</a>
                         <?php endif; ?>
                     </td>
                 </tr>

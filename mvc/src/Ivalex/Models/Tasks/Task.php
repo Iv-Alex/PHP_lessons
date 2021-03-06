@@ -66,9 +66,16 @@ class Task extends ActiveRecordEntity
         return $db->query($sql, [':task_status' => $this->status]);
     }
 
-    public function setStatus(int $status)
+    public function setStatus(array $status = [], bool $edited = false)
     {
-        $this->status = $status;
+        $sql = 'SELECT SUM(`binary_id`) AS `summary` FROM `task_status`' .
+            ' WHERE (`id` IN (' . implode(',', $status) . '))';
+        $sql .= $edited ? ' OR (`setting` LIKE "on_edit");' : ';';
+
+        $db = Db::getInstance();
+        $result = $db->query($sql);
+
+        $this->status = intval($result[0]->summary);
     }
 
     /**
@@ -91,7 +98,7 @@ class Task extends ActiveRecordEntity
         $task->setName($taskData['username']);
         $task->setEmail($taskData['email']);
         $task->setText($taskData['text']);
-        $task->setStatus(0);
+        $task->setStatus();
 
         $task->save();
 
@@ -108,12 +115,9 @@ class Task extends ActiveRecordEntity
         }
 
         $edited = ($this->getText() != $taskData['text']);
-        $status = 0;
 
-View::echoIt($taskData);
-exit;
         $this->setText($taskData['text']);
-        $this->setStatus($status);
+        $this->setStatus($taskData['status'], $edited);
 
         $this->save();
 

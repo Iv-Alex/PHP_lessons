@@ -1,7 +1,7 @@
 <?php include __DIR__ . '/header.php'; ?>
 <div class="d-flex justify-content-center align-items-center">
     <main class="container">
-        <h1><?= $header ?? '' ?></h1>
+        <h1 class="display-6">Редактирование задачи #<?= $task->getId() ?></h1>
         <?php if (!empty($error)) : ?>
             <div class="alert alert-danger" role="alert"><?= $error ?></div>
         <?php endif; ?>
@@ -27,7 +27,7 @@
                 <?php foreach ($task->getStatus(true) as $status) : ?>
                     <?php if ($status->setting != 'unactive') : ?>
                         <div class="form-check">
-                            <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->binary_id ?>" id="chbox<?= $status->id ?>" <?= ($status->setting != 'in_form') ? ' disabled' : '' ?><?= ($status->checked) ? ' checked' : '' ?>>
+                            <input class="form-check-input" name="status[]" type="checkbox" value="<?= $status->id ?>" id="chbox<?= $status->id ?>" <?= ($status->setting != 'in_form') ? ' disabled' : '' ?><?= ($status->checked) ? ' checked' : '' ?>>
                             <label class="form-check-label" for="chbox<?= $status->id ?>">
                                 <?= $status->status ?>
                             </label>
@@ -42,5 +42,8 @@
                 <button type="submit" name="updatetask" class="btn btn-primary">Сохранить</button>
             </div>
         </form>
+        <div>
+            <a href="/">Вернуться на главную</a>
+        </div>
     </main>
 </div><?php include __DIR__ . '/footer.php'; ?>
