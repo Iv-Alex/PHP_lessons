@@ -18,7 +18,7 @@
                 <?php endforeach; ?>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-break">
             <?php foreach ($tasks as $task) : ?>
                 <tr>
                     <th scope="row">#<?= $task->getId() ?></th>

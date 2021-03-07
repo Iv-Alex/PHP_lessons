@@ -45,7 +45,7 @@ class TasksController extends BasicController
 
             try {
                 // will use Prepared Statements to insert data into SQL query
-                $task = updateTask([
+                $task->updateTask([
                     'text' => $_POST['text'],
                     'status' => $_POST['status'],
                 ]);
