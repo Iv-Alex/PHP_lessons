@@ -82,7 +82,7 @@ abstract class ActiveRecordEntity
      */
     public static function getById(int $id): ?self
     {
-        $sql = 'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;';
+        $sql = 'SELECT * FROM `' . static::getTableName() . '` WHERE `id`=:id;';
         $params = [':id' => $id];
 
         $db = Db::getInstance();
@@ -93,7 +93,7 @@ abstract class ActiveRecordEntity
     /**
      * SELECT *
      *   FROM _table_name_
-     *   ORDER BY $orderColumn $descOrder[ASC, DESC]
+     *   ORDER BY $orderColumn $descOrder[ASC|DESC]
      *   LIMIT $offset, $countFetch
      */
     public static function getRowsGroup(int $offset, int $countFetch, string $orderColumn = 'id', bool $descOrder = false): array
@@ -121,30 +121,31 @@ abstract class ActiveRecordEntity
 
     public function save()
     {
-        $tableParams = $this->propertiesToTableParams();
         if ($this->id !== null) {
+            $tableParams = $this->propertiesToTableParams(false);
             $this->update($tableParams);
         } else {
+            $tableParams = $this->propertiesToTableParams();
             $this->insert($tableParams);
         }
     }
 
     private function update(array $tableParams): void
     {
+        // remove `id` field from the update list
+        unset($tableParams['sqlColumnsParams']['id']);
 
         $sql = 'UPDATE `' . static::getTableName() . '`' .
             ' SET ' . implode(', ', $tableParams['sqlColumnsParams']) .
-            ' WHERE id=:id';
+            ' WHERE `id`=:id';
 
         $db = Db::getInstance();
         $db->query($sql, $tableParams['paramsValues']);
-
-        // TODO edited by admin
-
     }
 
     private function insert(array $tableParams): void
     {
+
         $sql = 'INSERT INTO `' . static::getTableName() . '` ' .
             '(' . implode(', ', $tableParams['columns']) . ') ' .
             'VALUES (' . implode(', ', $tableParams['params']) . ')';
@@ -156,7 +157,7 @@ abstract class ActiveRecordEntity
 
     public function delete(): void
     {
-        $sql = 'DELETE FROM `' . static::getTableName() . '` WHERE id = :id';
+        $sql = 'DELETE FROM `' . static::getTableName() . '` WHERE `id` = :id';
         $params = [':id' => $this->id];
 
         $db = Db::getInstance();
@@ -167,11 +168,12 @@ abstract class ActiveRecordEntity
     /**
      * 
      */
-    private function propertiesToTableParams(): array
+    private function propertiesToTableParams(bool $excludeId = true): array
     {
 
         $reflector = new \ReflectionObject($this);
         $properties = $reflector->getProperties();
+
         $tableParams = [
             'columns' => [],
             'params' => [],
@@ -182,12 +184,14 @@ abstract class ActiveRecordEntity
         foreach ($properties as $property) {
             $propertyName = $property->getName();
             $columnName = self::camelCaseToUnderscore($propertyName); // lowercase
-            $paramName = ':' . $columnName;
-            $value = $this->$propertyName;
-            $tableParams['columns'][] = '`' . $columnName . '`';
-            $tableParams['params'][] = $paramName;
-            $tableParams['sqlColumnsParams'][] = $columnName . '=' . $paramName;
-            $tableParams['paramsValues'][$paramName] = $value;
+            if (!($excludeId && ($columnName == 'id'))) {
+                $paramName = ':' . $columnName;
+                $value = $this->$propertyName;
+                $tableParams['columns'][$columnName] = '`' . $columnName . '`';
+                $tableParams['params'][$columnName] = $paramName;
+                $tableParams['sqlColumnsParams'][$columnName] = '`' . $columnName . '`' . '=' . $paramName;
+                $tableParams['paramsValues'][$paramName] = $value;
+            }
         }
 
         return $tableParams;
@@ -205,8 +209,8 @@ abstract class ActiveRecordEntity
 
     /**
      * For use in the SQL construction ...WHERE <$field> IN (<$values>)...
-     * Convets the array $values to SQL blocks '[OR] (<$field> < =|like > :param<1..N>)'
-     * and array of params [':param<1..N>'=><$values>]
+     * Convets the array $values to SQL blocks '[OR] (<$field> < =|like > :$field<1..N>)'
+     * and array of params [':field<1..N>'=><$values>]
      * @param string $field
      * @param array $values
      * @param string $operator comparison operator such as '=' or 'like'
@@ -216,12 +220,13 @@ abstract class ActiveRecordEntity
     {
         $params = array();
         if (empty($values)) {
-            $sql = '`' . $field . '` IN (\'\')';
+            $sql = '`id` IN (:nullparam)';
+            $params[':nullparam'] = 'NULL';
         } else {
             $sqlBlocks = array();
             foreach ($values as $key => $value) {
-                $sqlBlocks[] = '(`' . $field . '`' . $operator . ':param' . $key . ')';
-                $params[':param' . $key] = $value;
+                $sqlBlocks[] = '(`' . $field . '`' . $operator . ':field' . $key . ')';
+                $params[':field' . $key] = $value;
             }
             $sql = implode(' OR ', $sqlBlocks);
         }
