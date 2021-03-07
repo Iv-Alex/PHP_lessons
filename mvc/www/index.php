@@ -11,7 +11,7 @@ try {
     });
 
     // routing
-    $route = strtolower($_GET['route'] ?? '');
+    $route = strtolower(($_GET['route'] ?? ''));
 
     $routes = require __DIR__ . '/../src/routes.php';
 

@@ -2,8 +2,6 @@
 
 namespace Ivalex\Models\Users;
 
-use Ivalex\Views\View;
-
 /**
  * treatment AuthToken in Cookie
  */

@@ -37,22 +37,18 @@ class TasksController extends BasicController
             throw new NotFoundException();
         }
 
-        if ($this->user === null) {
-            throw new UnauthorizedException();
-        } elseif ($this->user->getRole() != 'admin') {
-            throw new ForbiddenException();
-        }
-
         if (isset($_POST['updatetask'])) {
+            if (($this->user === null) || ($this->user->getRole() != 'admin')) {
+                header('Location: /users/login');
+                exit();
+            }
+
             try {
-                $task->updateTask($_POST);
-                /*
-                $user = User::signUp([
-                    'username' => $_POST['username'],
-                    'email' => $_POST['email'],
-                    'password' => $_POST['password'],
+                // will use Prepared Statements to insert data into SQL query
+                $task = updateTask([
+                    'text' => $_POST['text'],
+                    'status' => $_POST['status'],
                 ]);
-                */
             } catch (BadValueException $e) {
                 $this->view->renderHtml(
                     'editTask.php',
@@ -65,6 +61,12 @@ class TasksController extends BasicController
             }
             header('Location: /tasks/' . $task->getId() . '/message/1', true, 302);
             exit();
+        } else {
+            if ($this->user === null) {
+                throw new UnauthorizedException();
+            } elseif ($this->user->getRole() != 'admin') {
+                throw new ForbiddenException();
+            }
         }
 
         $this->view->renderHtml('editTask.php', ['task' => $task]);
@@ -78,14 +80,12 @@ class TasksController extends BasicController
 
         if (isset($_POST['addtask'])) {
             try {
-                $task = Task::createTask($_POST);
-                /*
-                $user = User::signUp([
+                // will use Prepared Statements to insert data into SQL query
+                $task = Task::createTask([
                     'username' => $_POST['username'],
                     'email' => $_POST['email'],
-                    'password' => $_POST['password'],
+                    'text' => $_POST['text'],
                 ]);
-                */
             } catch (BadValueException $e) {
                 $this->view->renderHtml('addTask.php', ['error' => $e->getMessage()]);
                 return;

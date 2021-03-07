@@ -14,10 +14,11 @@ class UsersController extends BasicController
     {
         if (isset($_POST['signup'])) {
             try {
+                // will use Prepared Statements to insert data into SQL query
                 $user = User::signUp([
                     'username' => $_POST['username'],
                     'email' => $_POST['email'],
-                    'password' => $_POST['password'],
+                    'password' => $_POST['psswrd'],
                 ]);
                 // go to the login page and inform about successful registration
                 header('Location: /users/login/message/0');
@@ -35,9 +36,10 @@ class UsersController extends BasicController
     {
         if (isset($_POST['login'])) {
             try {
+                // will use Prepared Statements to insert data into SQL query
                 $user = User::login([
                     'username' => $_POST['username'],
-                    'password' => $_POST['password'],
+                    'password' => $_POST['psswrd'],
                 ]);
                 UsersAuthService::createToken($user);
                 // go to home page

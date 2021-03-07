@@ -3,8 +3,8 @@
 return [
     'db' => [
         'host' => 'localhost',
-        'dbname' => 'iv_alex',
-        'user' => 'beejeepadavan',
+        'dbname' => 'ivalekstest',
+        'user' => 'ivalekstest',
         'password' => 'Yu_zefREG5EEdTX',
     ],
     'ApplicationOptions' => [

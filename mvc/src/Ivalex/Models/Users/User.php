@@ -89,7 +89,7 @@ class User extends ActiveRecordEntity
             throw new BadValueException('Не передано имя пользоателя');
         }
         if (empty($loginData['password'])) {
-            throw new BadValueException('Не передан password');
+            throw new BadValueException('Не передан пароль');
         }
         $user = User::findOneByColumn('name', $loginData['username']);
         if ($user === null) {

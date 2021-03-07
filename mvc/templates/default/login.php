@@ -19,8 +19,8 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">* Пароль</label>
-                        <input id="passord" name="password" type="password" class="form-control" value="<?= $_POST['password'] ?? '' ?>" required>
+                        <label for="psswrd" class="form-label">* Пароль</label>
+                        <input id="psswrd" name="psswrd" type="password" class="form-control" value="<?= $_POST['psswrd'] ?? '' ?>" required>
                     </div>
                     <div class="mb-3">
                         <div class="form-text">* - обязательные к заполнению поля</div>
