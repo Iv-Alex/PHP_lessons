@@ -6,9 +6,6 @@ use Ivalex\Models\ActiveRecordEntity;
 use Ivalex\Services\Db;
 use Ivalex\Exceptions\BadValueException;
 
-
-use Ivalex\Views\View;
-
 /**
  * other properties will add automatically
  */
@@ -19,9 +16,14 @@ class Task extends ActiveRecordEntity
     protected $text;
     protected $status;
 
+    /**
+     * All functions get<StringField>() returns htmlspecialchars(<value>).
+     * Use or create if missing get<StringField>Directly() for get the original values
+     * @return string user name
+     */
     public function getName(): string
     {
-        return $this->name;
+        return htmlspecialchars($this->name);
     }
 
     public function setName(string $name)
@@ -29,9 +31,14 @@ class Task extends ActiveRecordEntity
         $this->name = $name;
     }
 
+    /**
+     * All functions get<StringField>() returns htmlspecialchars(<value>).
+     * Use or create if missing get<StringField>Directly() for get the original values
+     * @return string email
+     */
     public function getEmail(): string
     {
-        return $this->email;
+        return htmlspecialchars($this->email);
     }
 
     public function setEmail(string $email)
@@ -39,9 +46,14 @@ class Task extends ActiveRecordEntity
         $this->email = $email;
     }
 
+    /**
+     * All functions get<StringField>() returns htmlspecialchars(<value>).
+     * Use or create if missing get<StringField>Directly() for get the original values
+     * @return string task text
+     */
     public function getText(): string
     {
-        return $this->text;
+        return htmlspecialchars($this->text);
     }
 
     public function setText(string $text)

@@ -4,8 +4,6 @@ namespace Ivalex\Models;
 
 use Ivalex\Services\Db;
 
-use Ivalex\Views\View;
-
 /**
  * base class for table objects with convertion dynamic properties names
  */
@@ -20,7 +18,7 @@ abstract class ActiveRecordEntity
     }
 
     /**
-     * 
+     * @return int record id (autoincremental index field)
      */
     public function getId(): int
     {
@@ -28,10 +26,9 @@ abstract class ActiveRecordEntity
     }
 
     /**
-     * contract
+     * contract for each entity
      * @return string tableName
      */
-
     abstract protected static function getTableName(): string;
 
     /**

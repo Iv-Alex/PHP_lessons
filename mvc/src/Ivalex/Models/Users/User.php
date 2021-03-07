@@ -13,19 +13,34 @@ class User extends ActiveRecordEntity
     protected $role;
     protected $authToken;
 
+    /**
+     * All functions get<StringField>() returns htmlspecialchars(<value>).
+     * Use or create if missing get<StringField>Directly() for get the original values
+     * @return string user name
+     */
     public function getName(): string
     {
-        return $this->name;
+        return htmlspecialchars($this->name);
     }
 
+    /**
+     * All functions get<StringField>() returns htmlspecialchars(<value>).
+     * Use or create if missing get<StringField>Directly() for get the original values
+     * @return string user name
+     */
     public function getEmail(): string
     {
-        return $this->email;
+        return htmlspecialchars($this->email);
     }
 
+    /**
+     * All functions get<StringField>() returns htmlspecialchars(<value>).
+     * Use or create if missing get<StringField>Directly() for get the original values
+     * @return string user name
+     */
     public function getRole(): string
     {
-        return $this->role;
+        return htmlspecialchars($this->role);
     }
 
     public function getAuthToken(): string
