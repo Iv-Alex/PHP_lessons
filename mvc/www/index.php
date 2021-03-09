@@ -37,8 +37,6 @@ try {
     // create the controller's object and launch the action
     $controller = new $controllerName();
 
-    //  View::echoIt($matches);
-
     $controller->$actionName(...$matches);
 } catch (Ivalex\Exceptions\DbException $e) {
     showErrorPage($e);

@@ -6,11 +6,17 @@ use Ivalex\Exceptions\DbException;
 
 class Db
 {
+    /**
+     * @var object singleton database instance
+     */
     private static $instance;
+    /**
+     * @var object PHP data object instance
+     */
     private $pdo;
 
     /**
-     * db creates by the function getInstance
+     * Singleton Db instance creates once by the function getInstance
      */
     private function __construct()
     {
@@ -31,7 +37,7 @@ class Db
     }
 
     /**
-     * 
+     * @return object Singleton Db instance
      */
     public static function getInstance(): self
     {
