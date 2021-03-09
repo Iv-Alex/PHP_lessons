@@ -12,23 +12,23 @@ try {
     });
 
     # routing
-    $controllerAction = routeToControllerAction(
+    $requiredController = routeToControllerAction(
         strtolower(($_GET['route'] ?? '')),
         require __DIR__ . '/../src/routes.php'
     );
     # except page not found if route does not match any pattern
-    if ($controllerAction === null) {
+    if ($requiredController === null) {
         throw new Ivalex\Exceptions\NotFoundException();
     }
 
     # get the required controller name
-    $controllerName = $controllerAction['controllerName'];
+    $controllerName = $requiredController['controllerName'];
     # get the required action
-    $actionName = $controllerAction['actionName'];
+    $actionName = $requiredController['actionName'];
 
     # create the controller's object and launch the action
     $controller = new $controllerName;
-    $controller->$actionName(...$controllerAction['params']);
+    $controller->$actionName(...$requiredController['params']);
 } catch (Ivalex\Exceptions\DbException $e) {
     showErrorPage($e);
 } catch (Ivalex\Exceptions\NotFoundException $e) {
