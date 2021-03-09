@@ -8,14 +8,14 @@ namespace Ivalex\Models\Users;
 class UsersAuthService
 {
 
-    // login user
+    # login user
     public static function createToken(User $user): void
     {
         $token = $user->getId() . ':' . $user->getAuthToken();
         setcookie('token', $token, 0, '/', '', false, true);
     }
 
-    // logout user
+    # logout user
     public static function removeToken(): void
     {
         setcookie('token', '', time() - 3600, '/', '');

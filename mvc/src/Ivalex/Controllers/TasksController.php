@@ -16,7 +16,7 @@ class TasksController extends BasicController
 
         $task = Task::getById($taskId);
 
-        // if task not found
+        # if task not found
         if ($task === null) {
             throw new NotFoundException();
         }

@@ -14,13 +14,13 @@ class UsersController extends BasicController
     {
         if (isset($_POST['signup'])) {
             try {
-                // will use Prepared Statements to insert data into SQL query
+                # will use Prepared Statements to insert data into SQL query
                 $user = User::signUp([
                     'username' => $_POST['username'],
                     'email' => $_POST['email'],
                     'password' => $_POST['psswrd'],
                 ]);
-                // go to the login page and inform about successful registration
+                # go to the login page and inform about successful registration
                 header('Location: /users/login/message/0');
                 exit();
             } catch (BadValueException $e) {
@@ -36,13 +36,13 @@ class UsersController extends BasicController
     {
         if (isset($_POST['login'])) {
             try {
-                // will use Prepared Statements to insert data into SQL query
+                # will use Prepared Statements to insert data into SQL query
                 $user = User::login([
                     'username' => $_POST['username'],
                     'password' => $_POST['psswrd'],
                 ]);
                 UsersAuthService::createToken($user);
-                // go to home page
+                # go to home page
                 header('Location: /');
                 exit();
             } catch (BadValueException $e) {
@@ -59,9 +59,9 @@ class UsersController extends BasicController
 
     public function logout()
     {
-        // remove AuthToken for logout
+        # remove AuthToken for logout
         UsersAuthService::removeToken();
-        // go to home page
+        # go to home page
         header('Location: /');
         exit();
     }

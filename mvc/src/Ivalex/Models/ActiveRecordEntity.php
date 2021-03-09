@@ -9,8 +9,10 @@ use Ivalex\Services\Db;
  */
 abstract class ActiveRecordEntity
 {
+    # table record id
     protected $id;
 
+    # dynamic object property addition
     public function __set($property, $value)
     {
         $propertyName = self::underscoreToCamelCase($property);
