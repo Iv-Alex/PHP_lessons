@@ -29,7 +29,6 @@ try {
     # create the controller's object and launch the action
     $controller = new $controllerName;
     $controller->$actionName(...$controllerAction['params']);
-
 } catch (Ivalex\Exceptions\DbException $e) {
     showErrorPage($e);
 } catch (Ivalex\Exceptions\NotFoundException $e) {
@@ -41,7 +40,8 @@ try {
 }
 
 /**
- * 
+ * @param string $route route string from $_GET['route']
+ * @param string $routes an array of preset route patterns including assigned class names and actions
  */
 function routeToControllerAction(string $route, array $routes): ?array
 {
@@ -73,7 +73,11 @@ function routeToControllerAction(string $route, array $routes): ?array
     ];
 }
 
-function showErrorPage($e)
+/**
+ * redirect on error page
+ * @param exception
+ */
+function showErrorPage($e): void
 {
     $view = new View('default', false);
     $view->renderHtml(
