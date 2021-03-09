@@ -66,17 +66,6 @@ abstract class ActiveRecordEntity
     }
 
     /**
-     * 
-     */
-    public static function getAllRecords(): array
-    {
-        $sql = 'SELECT * FROM `' . static::getTableName() . '`;';
-
-        $db = Db::getInstance();
-        return $db->query($sql, [], static::class);
-    }
-
-    /**
      * can be used for multiple records if 'id' is not unique
      */
     public static function getById(int $id): ?self
