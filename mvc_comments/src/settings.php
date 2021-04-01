@@ -3,7 +3,7 @@
 return [
     'db' => [
         'host' => 'localhost',
-        'dbname' => 'ivalekstest',
+        'dbname' => 'comments',
         'user' => 'ivalekstest',
         'password' => 'Yu_zefREG5EEdTX',
     ],

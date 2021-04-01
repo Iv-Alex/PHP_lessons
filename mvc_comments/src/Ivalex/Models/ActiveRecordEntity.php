@@ -9,10 +9,10 @@ use Ivalex\Services\Db;
  */
 abstract class ActiveRecordEntity
 {
-    # table record id
+    // table record id
     protected $id;
 
-    # dynamic object property addition
+    // dynamic object property addition
     public function __set($property, $value)
     {
         $propertyName = self::underscoreToCamelCase($property);
@@ -33,28 +33,6 @@ abstract class ActiveRecordEntity
      */
     abstract protected static function getTableName(): string;
 
-    /**
-     * @param bool $byFieldName if true, then returns an array indexed by fieldnames, otherwise indexed in schema order
-     * @return array of indexed fields
-     */
-    public static function getFields(bool $byFieldName = false): array
-    {
-        $fields = array();
-        $sql = 'DESCRIBE `' . static::getTableName() . '`;';
-
-        $db = Db::getInstance();
-        $result =  $db->query($sql);
-        foreach ($result as $key => $fieldObject) {
-            if ($byFieldName) {
-                $fields[$fieldObject->Field] = $key;
-            } else {
-                $fields[$key] = $fieldObject->Field;
-            }
-        }
-
-        return $fields;
-    }
-
     public static function getRecordCount(): int
     {
         $sql = 'SELECT COUNT(`id`) AS `cRecords` FROM `' . static::getTableName() . '`;';
@@ -66,16 +44,17 @@ abstract class ActiveRecordEntity
     }
 
     /**
-     * can be used for multiple records if 'id' is not unique
+     * can be used for multiple records
+     * @param int $id - record id
+     * @param string $compareOperator - "=", ">", "<=" etc.
      */
-    public static function getById(int $id): ?self
+    public static function getById(int $id, string $compareOperator = '='): array
     {
-        $sql = 'SELECT * FROM `' . static::getTableName() . '` WHERE `id`=:id;';
+        $sql = 'SELECT * FROM `' . static::getTableName() . '` WHERE `id`' . $compareOperator . ':id;';
         $params = [':id' => $id];
 
         $db = Db::getInstance();
-        $recordById = $db->query($sql, $params, static::class);
-        return $recordById ? $recordById[0] : null;
+        return $db->query($sql, $params, static::class);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Ivalex\Services;
 
 use Ivalex\Exceptions\DbException;
+use Ivalex\Services\Environment;
 
 class Db
 {
@@ -20,7 +21,7 @@ class Db
      */
     private function __construct()
     {
-        $dbOptions = (require __DIR__ . '/../../settings.php')['db'];
+        $dbOptions = Environment::getInstance()->getDbOptions();
 
         try {
             $this->pdo = new \PDO(

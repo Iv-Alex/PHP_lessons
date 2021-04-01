@@ -3,6 +3,6 @@
  * the router works with strtolower(route)
  */
 return [
-    '~^tasks/add$~' => [\Ivalex\Controllers\TasksController::class, 'add'],
+    '~^add$~' => [\Ivalex\Controllers\CommentsController::class, 'addComment'],
     '~^$~' => [\Ivalex\Controllers\CommentsController::class, 'singlePage'],
 ];

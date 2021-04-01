@@ -7,9 +7,8 @@ use Ivalex\Exceptions\BadValueException;
 
 
 /**
- * All functions get<StringField>() will return htmlspecialchars(<value>).
- * Use or create if missing get<StringField>Directly() for get the original values
- *
+ * All functions get*StringField*() will return htmlspecialchars(*value*)./
+ * Use or create if missing get*StringField*Directly() for get the original values
  */
 class Comment extends ActiveRecordEntity
 {
