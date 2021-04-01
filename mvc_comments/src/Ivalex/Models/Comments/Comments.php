@@ -3,15 +3,15 @@
 namespace Ivalex\Models\Comments;
 
 use Ivalex\Models\ActiveRecordEntity;
-use Ivalex\Services\Db;
 use Ivalex\Exceptions\BadValueException;
+
 
 /**
  * All functions get<StringField>() will return htmlspecialchars(<value>).
  * Use or create if missing get<StringField>Directly() for get the original values
  *
  */
-class Task extends ActiveRecordEntity
+class Comment extends ActiveRecordEntity
 {
     protected $name;
     protected $email;
@@ -44,9 +44,7 @@ class Task extends ActiveRecordEntity
     }
 
     /**
-     * All functions get<StringField>() returns htmlspecialchars(<value>).
-     * Use or create if missing get<StringField>Directly() for get the original values
-     * @return string task text
+     * @return string comment text
      */
     public function getText(): string
     {
@@ -59,85 +57,36 @@ class Task extends ActiveRecordEntity
     }
 
     /**
-     * 
+     *
      */
-    public function getStatus(bool $allRecords = false): array
+    public static function addComment(array $commentData): Comment
     {
-        if ($allRecords) {
-            $sql = 'SELECT `a`.*, `b`.`checked` FROM `task_status` AS `a` LEFT OUTER JOIN' .
-                '(SELECT `id`, 1 AS `checked` FROM `task_status` WHERE (`binary_id` & :task_status)) AS `b`' .
-                'ON `a`.`id`=`b`.`id`;';
-        } else {
-            $sql = 'SELECT * FROM `task_status` WHERE (`binary_id` & :task_status);';
+        if (empty($commentData['username'])) {
+            throw new BadValueException('Username not passed', 1001);
+        }
+        if (empty($commentData['email'])) {
+            throw new BadValueException('Email address not passed', 1002);
+        }
+        if (empty($commentData['text'])) {
+            throw new BadValueException('Comment text not passed', 1003);
         }
 
-        $db = Db::getInstance();
-        return $db->query($sql, [':task_status' => $this->status]);
+        $comment = new Comment();
+
+        $comment->setName($commentData['username']);
+        $comment->setEmail($commentData['email']);
+        $comment->setText($commentData['text']);
+
+        $comment->save();
+
+        return $comment;
     }
 
-    public function setStatus(array $status = [], bool $edited = false)
-    {
-        $preparedStatements = self::arrayPreparedStatements('id', $status);
-
-        $sql = 'SELECT SUM(`binary_id`) AS `summary` FROM `task_status` WHERE ' . $preparedStatements['sql'];
-        $sql .= $edited ? ' OR (`setting` LIKE "on_edit");' : ';';
-
-        $db = Db::getInstance();
-        $result = $db->query($sql, $preparedStatements['params']);
-
-        $this->status = empty($result[0]) ? 0 : intval($result[0]->summary);
-    }
-
-    /**
-     * 
-     */
-    public static function createTask(array $taskData): Task
-    {
-        if (empty($taskData['username'])) {
-            throw new BadValueException('Не передано имя пользоателя');
-        }
-        if (empty($taskData['email'])) {
-            throw new BadValueException('Не передан адрес электронной почты');
-        }
-        if (empty($taskData['text'])) {
-            throw new BadValueException('Не передан текст задачи');
-        }
-
-        $task = new Task();
-
-        $task->setName($taskData['username']);
-        $task->setEmail($taskData['email']);
-        $task->setText($taskData['text']);
-        $task->setStatus();
-
-        $task->save();
-
-        return $task;
-    }
-
-    /**
-     * 
-     */
-    public function updateTask(array $taskData): Task
-    {
-        if (empty($taskData['text'])) {
-            throw new BadValueException('Не передан текст задачи');
-        }
-
-        $edited = ($this->getText() != $taskData['text']);
-
-        $this->setText($taskData['text']);
-        $this->setStatus($taskData['status'] ?? [], $edited);
-
-        $this->save();
-
-        return $this;
-    }
     /**
      * contract
      */
     protected static function getTableName(): string
     {
-        return 'tasks';
+        return 'comments';
     }
 }

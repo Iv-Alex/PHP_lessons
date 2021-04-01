@@ -4,5 +4,5 @@
  */
 return [
     '~^tasks/add$~' => [\Ivalex\Controllers\TasksController::class, 'add'],
-    '~^$~' => [\Ivalex\Controllers\MainController::class, 'main'],
+    '~^$~' => [\Ivalex\Controllers\CommentsController::class, 'singlePage'],
 ];

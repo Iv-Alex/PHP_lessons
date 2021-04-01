@@ -6,11 +6,13 @@ use Ivalex\Controllers\BasicController;
 
 /**
  * @var string $templatePath
- * @var array $extraVars - additional preset vars
+ * @var array $templateParts - $partName => $partFileName ($pageHeader, $pageFooter etc.)
+ * @var array $extraVars - additional preset var pairs $key => $value
  */
 class View
 {
     private $templatePath;
+    private $templateParts = [];
     private $extraVars = [];
     private static $messages = array();
 
@@ -18,6 +20,8 @@ class View
     {
         $templatesPath = __DIR__ . '/../../../templates';
         $this->templatePath = $templatesPath . '/' . $templateDir;
+
+        // get Lang messages
         if ($useMessenges && empty(self::$messages)) {
             self::$messages = include __DIR__ . '/Lang/' . BasicController::getOption('language') . '/messages.php';
         }
@@ -41,6 +45,14 @@ class View
     }
 
     /**
+     * Add variables before rendering the page
+     */
+    public function setTemplatePart(string $partName, string $partFileName): void
+    {
+        $this->templateParts[$partName] = $partFileName;
+    }
+
+    /**
      * creates html page using variables ($vars)
      *
      * @param string $templateName name of the page template
@@ -54,6 +66,19 @@ class View
         extract($this->extraVars);
         // get variables
         extract($vars);
+        // get template parts
+        foreach ($this->templateParts as $partName => $partFileName) {
+            $partFilePath = $this->templatePath . '/' . $partFileName;
+            if (file_exists($partFilePath)) {
+                ob_start();
+                include $partFilePath;
+                $templateParts[$partName] = ob_get_contents();
+                ob_end_clean();
+            } else {
+                $templateParts[$partName] = '';
+            }
+        }
+        extract($templateParts);
 
         // put the page in the buffer
         ob_start();
