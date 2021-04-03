@@ -25,7 +25,7 @@
                 <div class="row pb-2">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-3 text-center">
-                        <img src="images/envelope.png" alt="Оставьте комментарий" title="Оставьте комментарий" class="envelope">
+                        <img src="images/envelope.svg" alt="Оставьте комментарий" title="Оставьте комментарий" class="envelope">
                     </div>
                     <div class="col-sm-5"></div>
                 </div>
@@ -33,10 +33,20 @@
             </div>
             <div class="col-sm"></div>
         </div>
-        <?= $commentsList ?? '' ?>
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm-9">
+                <?= $commentsList ?? '' ?>
+            </div>
+            <div class="col-sm"></div>
+        </div>
+
+
         <?= $pageFooter ?? '' ?>
 
-    </div>
+        <!-- Application JS -->
+        <script src="js/script.js"></script>
+
 </body>
 
 </html>

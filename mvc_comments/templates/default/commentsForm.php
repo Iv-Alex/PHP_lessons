@@ -16,12 +16,12 @@
             <textarea class="form-control" id="text" name="text" rows="6"><?= $_POST['text'] ?? '' ?></textarea>
         </div>
     </div>
-    <div class="d-flex align-items-end">
-        <div class="col-lg-7 mb-3">
-            <div class="text-danger form-error"><?= $error ?? '' ?></div>
+    <div class="d-md-flex justify-content-between align-items-end">
+        <div class="col-lg-7">
+            <div class="form-message"><?= isset($error) ? "<div class=\"text-danger\">$error</div>" : "" ?></div>
         </div>
         <div class="col-lg-5 text-end">
-            <button type="submit" id="addComment" name="addComment" class="btn text-light fs-5 mt-5">Записать</button>
+            <button type="submit" id="addComment" name="addComment" class="btn btn-danger fs-5 mt-5">Записать</button>
         </div>
     </div>
 </form>

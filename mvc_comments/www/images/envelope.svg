@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW 2020 (64-Bit) -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="600px" height="600px" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 600 600"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str1 {stroke:#DCA9A3;stroke-width:0.9;stroke-miterlimit:22.9256}
+    .str2 {stroke:#DE6A56;stroke-width:0.9;stroke-miterlimit:22.9256}
+    .str0 {stroke:#2B2A29;stroke-width:2.36;stroke-miterlimit:22.9256}
+    .fil1 {fill:none}
+    .fil0 {fill:#383939}
+    .fil3 {fill:#A03031}
+    .fil2 {fill:#BC383A}
+    .fil9 {fill:#DE6A56}
+    .fil7 {fill:#EEAFA7}
+    .fil6 {fill:#F1C2BA}
+    .fil5 {fill:#F7D6D2}
+    .fil4 {fill:#F8DEDA}
+    .fil8 {fill:#FAE8E6}
+   ]]>
+  </style>
+ </defs>
+ <g id="Слой_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_1127801952">
+   <circle class="fil0" cx="300" cy="300" r="300"/>
+   <g>
+    <line class="fil1 str0" x1="300" y1="0" x2="300" y2= "0" />
+   </g>
+   <circle class="fil2" cx="300" cy="300" r="245.7"/>
+   <path class="fil3" d="M444.33 407.35l-137.32 138.39c-3.99,0.19 -2.97,-0.04 -7.01,-0.04 -135.7,0 -245.7,-110 -245.7,-245.7 0,-1.37 0.01,-2.73 0.03,-4.09l102.08 -100.43 287.92 211.87z"/>
+   <rect class="fil4 str1" x="148.92" y="189.25" width="302.15" height="225.27" rx="23.66" ry="23.66"/>
+   <polygon class="fil5 str1" points="449.77,388.63 339.45,297.8 331.03,305.86 "/>
+   <polygon class="fil6 str1" points="444.09,197.11 316.27,353.39 285.63,353.38 156.62,196.05 "/>
+   <g>
+    <line class="fil1 str0" x1="300.35" y1="196.05" x2="300.35" y2= "196.05" />
+   </g>
+   <polygon class="fil7 str1" points="299.67,284 346.15,316.54 352.83,308.64 312.08,275.27 "/>
+   <path class="fil8 str1" d="M451.08 389.54l0 1.32c0,13.01 -10.65,23.66 -23.66,23.66l-254.84 0c-13.01,0 -23.66,-10.65 -23.66,-23.66l0 -0.9 150.75 -105.96 151.41 105.54z"/>
+   <path class="fil9 str2" d="M444.81 196.91l-128.54 123.08c-8.42,8.06 -22.21,8.06 -30.64,-0.02l-129.51 -124.01c4.26,-4.15 10.08,-6.71 16.46,-6.71l254.84 0c6.86,0 13.06,2.95 17.39,7.66z"/>
+  </g>
+ </g>
+</svg>

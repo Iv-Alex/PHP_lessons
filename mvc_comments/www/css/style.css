@@ -7,26 +7,65 @@ img.envelope {
     max-width: 150px;
 }
 
+/* BEGIN form styles */
+
 #comment-form {
     color: #d7d7d7;
 }
 
-#comment-form input, #comment-form textarea {
+#comment-form input, 
+#comment-form input:-webkit-autofill,
+#comment-form textarea {
     background-color: #2f3338;
     padding: 0.8em;
     border-color: #4c4f53;
+    color: #d7d7d7;
+    box-shadow: 0 0 0 30px #2f3338 inset;
+    -webkit-text-fill-color: #d7d7d7 !important;
+    -moz-text-fill-color: #d7d7d7 !important;
 }
 
-#comment-form input:hover, #comment-form textarea:hover,
-#comment-form input:active, #comment-form textarea:active {
+#comment-form input:hover,
+#comment-form textarea:hover ,
+#comment-form input:focus, #comment-form textarea:focus {
+    box-shadow: 0 0 0 30px #2f3338 inset, 0 0 0 3px #743538;
     border-color: #743538;
-    transition: all 1s ease-out;
+    transition: all .5s ease-out;
 }
 
-
-
+.form-message div {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1em;
+    border-radius: 3px;
+}
 
 #addComment {
     background-color: #be393b;
 }
 
+#addComment:hover {
+    background-color: #a03031;
+
+}
+
+/* END form styles */
+
+.article-header {
+    color: #37414e;
+}
+
+/* BEGIN comments list styles */
+
+#comments-list {
+    overflow-wrap: break-word;
+}
+
+#comments-list section:nth-child(even) {
+    background-color: violet;
+}
+
+#comments-list section:nth-child(odd) {
+    background-color: royalblue;
+}
+
+/* END comments list styles */
