@@ -66,6 +66,7 @@ class CommentsController extends BasicController
                 $results['error'] = '';
                 $success = true;
                 $results['data'] = [
+                    'id' => $comment->getId(),
                     'username' => $comment->getName(),
                     'email' => $comment->getEmail(),
                     'text' => $comment->getText(),
